@@ -23,7 +23,6 @@ export const AppHeader: FC = () => {
       const target = e.target as HTMLElement;
       const text = target.textContent?.toLowerCase() || '';
 
-      // Ищем родительский элемент с нужным текстом
       let currentElement: HTMLElement | null = target;
       while (currentElement && currentElement !== headerRef.current) {
         const currentText = currentElement.textContent?.toLowerCase() || '';

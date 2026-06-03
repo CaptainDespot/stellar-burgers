@@ -37,7 +37,6 @@ export const BurgerConstructor: FC = () => {
       .unwrap()
       .then(() => {
         dispatch(clearConstructor());
-        // После успешного создания заказа обновляем историю
         dispatch(fetchUserOrders());
       });
   };
