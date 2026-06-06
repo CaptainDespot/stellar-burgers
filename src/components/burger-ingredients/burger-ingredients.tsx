@@ -3,19 +3,13 @@ import { useInView } from 'react-intersection-observer';
 import { TTabMode, TIngredient } from '@utils-types';
 import { BurgerIngredientsUI } from '../ui/burger-ingredients';
 import { useDispatch, useSelector } from '../../services/store';
-import { fetchIngredients } from '../../services/slices/ingredientsSlices';
 import { RootState } from '../../services/store';
 import { Preloader } from '@ui';
 
 export const BurgerIngredients: FC = () => {
-  const dispatch = useDispatch();
   const { ingredients, isLoading } = useSelector(
     (state: RootState) => state.ingredients
   );
-
-  useEffect(() => {
-    dispatch(fetchIngredients());
-  }, [dispatch]);
 
   const buns = ingredients.filter((item: TIngredient) => item.type === 'bun');
   const mains = ingredients.filter((item: TIngredient) => item.type === 'main');
@@ -52,12 +46,24 @@ export const BurgerIngredients: FC = () => {
 
   const onTabClick = (tab: string) => {
     setCurrentTab(tab as TTabMode);
-    if (tab === 'bun')
-      titleBunRef.current?.scrollIntoView({ behavior: 'smooth' });
-    if (tab === 'main')
-      titleMainRef.current?.scrollIntoView({ behavior: 'smooth' });
-    if (tab === 'sauce')
-      titleSaucesRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (tab === 'bun') {
+      titleBunRef.current?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest'
+      });
+    }
+    if (tab === 'main') {
+      titleMainRef.current?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest'
+      });
+    }
+    if (tab === 'sauce') {
+      titleSaucesRef.current?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest'
+      });
+    }
   };
 
   if (isLoading) return <Preloader />;

@@ -5,11 +5,13 @@ import { TOrder } from '../../utils/types';
 type TOrderState = {
   orderRequest: boolean;
   orderModalData: TOrder | null;
+  viewedOrder: TOrder | null;
 };
 
 const initialState: TOrderState = {
   orderRequest: false,
-  orderModalData: null
+  orderModalData: null,
+  viewedOrder: null
 };
 
 export const createOrder = createAsyncThunk(
@@ -34,6 +36,9 @@ const orderSlice = createSlice({
   reducers: {
     clearOrderModalData: (state) => {
       state.orderModalData = null;
+    },
+    clearViewedOrder: (state) => {
+      state.viewedOrder = null;
     }
   },
   extraReducers: (builder) => {
@@ -49,10 +54,10 @@ const orderSlice = createSlice({
         state.orderRequest = false;
       })
       .addCase(getOrderByNumber.fulfilled, (state, action) => {
-        state.orderModalData = action.payload;
+        state.viewedOrder = action.payload;
       });
   }
 });
 
-export const { clearOrderModalData } = orderSlice.actions;
+export const { clearOrderModalData, clearViewedOrder } = orderSlice.actions;
 export default orderSlice.reducer;
