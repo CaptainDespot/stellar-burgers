@@ -1,10 +1,9 @@
 import { ProfileOrdersUI } from '@ui-pages';
 import { FC, useEffect } from 'react';
-import { fetchUserOrders } from '../../services/slices/userOrderSlice';
 import { Preloader } from '@ui';
 import { useDispatch, useSelector } from '../../services/store';
-import { userOrderSlice } from '../../services/slices/userOrderSlice';
-import { OrdersList } from '@components';
+
+import { fetchUserOrders } from '../../services/slices/userOrderSlice';
 
 export const ProfileOrders: FC = () => {
   const dispatch = useDispatch();
@@ -25,9 +24,5 @@ export const ProfileOrders: FC = () => {
     return <div>Ошибка: {error}</div>;
   }
 
-  if (!orders || orders.length === 0) {
-    return <div>У вас пока нет заказов</div>;
-  }
-
-  return <OrdersList orders={orders} />;
+  return <ProfileOrdersUI orders={orders} />;
 };

@@ -1,9 +1,7 @@
 import { FC } from 'react';
-
 import { Button, Input } from '@zlden/react-developer-burger-ui-components';
 import styles from './profile.module.css';
 import commonStyles from '../common.module.css';
-
 import { ProfileUIProps } from './type';
 import { ProfileMenu } from '@components';
 
@@ -16,15 +14,12 @@ export const ProfileUI: FC<ProfileUIProps> = ({
   handleInputChange
 }) => (
   <main className={`${commonStyles.container} ${styles.main}`}>
-    {/* Левая колонка: Меню + обязательный текст описания */}
+    {/* Левая колонка: Только меню (оно само выведет текст-подсказку под ссылками) */}
     <div className={`mt-30 mr-15 ${styles.menu}`}>
       <ProfileMenu />
-      <p className={`pt-20 text text_type_main-default text_color_inactive ${styles.text}`}>
-        В этом разделе вы можете изменить свои персональные данные
-      </p>
     </div>
 
-    {/* Правая колонка: Форма */}
+    {/* Правая колонка: Форма изменения данных */}
     <form
       className={`mt-30 ${styles.form} ${commonStyles.form}`}
       onSubmit={handleSubmit}
