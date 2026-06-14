@@ -1,7 +1,21 @@
+.main {
+  display: flex;
+  justify-content: center;
+  gap: 60px;
+  width: 100%;
+}
+
 .menu {
   width: 320px;
+  display: flex;
+  flex-direction: column;
+}
+
+.text {
+  max-width: 320px;
 }
 
 .form {
   max-width: 480px;
+  width: 100%;
 }

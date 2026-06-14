@@ -9,8 +9,7 @@ export type BurgerIngredientsUIProps = {
   titleBunRef: RefObject<HTMLHeadingElement>;
   titleMainRef: RefObject<HTMLHeadingElement>;
   titleSaucesRef: RefObject<HTMLHeadingElement>;
-  bunsRef: (node?: Element | null | undefined) => void;
-  mainsRef: (node?: Element | null | undefined) => void;
-  saucesRef: (node?: Element | null | undefined) => void;
+  containerRef: RefObject<HTMLDivElement>;
+  onScroll: () => void;
   onTabClick: (val: string) => void;
 };

@@ -1,53 +1,59 @@
-import { useState, useRef, useEffect, FC } from 'react';
-import { useInView } from 'react-intersection-observer';
-
-import { TTabMode } from '@utils-types';
+import { useState, useRef, FC } from 'react';
+import { TTabMode, TIngredient } from '@utils-types';
 import { BurgerIngredientsUI } from '../ui/burger-ingredients';
+import { useSelector } from '../../services/store';
+import { RootState } from '../../services/store';
+import { Preloader } from '@ui';
 
 export const BurgerIngredients: FC = () => {
-  /** TODO: взять переменные из стора */
-  const buns = [];
-  const mains = [];
-  const sauces = [];
+  const { ingredients, isLoading } = useSelector(
+    (state: RootState) => state.ingredients
+  );
+
+  const buns = ingredients.filter((item: TIngredient) => item.type === 'bun');
+  const mains = ingredients.filter((item: TIngredient) => item.type === 'main');
+  const sauces = ingredients.filter((item: TIngredient) => item.type === 'sauce');
 
   const [currentTab, setCurrentTab] = useState<TTabMode>('bun');
+
   const titleBunRef = useRef<HTMLHeadingElement>(null);
   const titleMainRef = useRef<HTMLHeadingElement>(null);
   const titleSaucesRef = useRef<HTMLHeadingElement>(null);
+  
+  const containerRef = useRef<HTMLDivElement>(null);
 
-  const [bunsRef, inViewBuns] = useInView({
-    threshold: 0
-  });
+  const handleScroll = () => {
+    if (!containerRef.current || !titleBunRef.current || !titleMainRef.current || !titleSaucesRef.current) return;
 
-  const [mainsRef, inViewFilling] = useInView({
-    threshold: 0
-  });
+    const containerTop = containerRef.current.getBoundingClientRect().top;
 
-  const [saucesRef, inViewSauces] = useInView({
-    threshold: 0
-  });
+    const bunDiff = Math.abs(titleBunRef.current.getBoundingClientRect().top - containerTop);
+    const mainDiff = Math.abs(titleMainRef.current.getBoundingClientRect().top - containerTop);
+    const sauceDiff = Math.abs(titleSaucesRef.current.getBoundingClientRect().top - containerTop);
 
-  useEffect(() => {
-    if (inViewBuns) {
+    if (bunDiff < mainDiff && bunDiff < sauceDiff) {
       setCurrentTab('bun');
-    } else if (inViewSauces) {
-      setCurrentTab('sauce');
-    } else if (inViewFilling) {
+    } else if (mainDiff < bunDiff && mainDiff < sauceDiff) {
       setCurrentTab('main');
+    } else {
+      setCurrentTab('sauce');
     }
-  }, [inViewBuns, inViewFilling, inViewSauces]);
+  };
 
   const onTabClick = (tab: string) => {
     setCurrentTab(tab as TTabMode);
-    if (tab === 'bun')
-      titleBunRef.current?.scrollIntoView({ behavior: 'smooth' });
-    if (tab === 'main')
-      titleMainRef.current?.scrollIntoView({ behavior: 'smooth' });
-    if (tab === 'sauce')
-      titleSaucesRef.current?.scrollIntoView({ behavior: 'smooth' });
+
+    let elementToScroll: HTMLHeadingElement | null = null;
+    if (tab === 'bun') elementToScroll = titleBunRef.current;
+    if (tab === 'main') elementToScroll = titleMainRef.current;
+    if (tab === 'sauce') elementToScroll = titleSaucesRef.current;
+
+    if (elementToScroll) {
+      elementToScroll.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
   };
 
-  return null;
+  if (isLoading) return <Preloader />;
 
   return (
     <BurgerIngredientsUI
@@ -58,9 +64,8 @@ export const BurgerIngredients: FC = () => {
       titleBunRef={titleBunRef}
       titleMainRef={titleMainRef}
       titleSaucesRef={titleSaucesRef}
-      bunsRef={bunsRef}
-      mainsRef={mainsRef}
-      saucesRef={saucesRef}
+      containerRef={containerRef}
+      onScroll={handleScroll}
       onTabClick={onTabClick}
     />
   );

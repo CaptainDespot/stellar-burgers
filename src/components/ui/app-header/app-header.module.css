@@ -1,6 +1,7 @@
 .header {
   background-color: var(--background);
 }
+
 .menu {
   display: flex;
   align-items: center;
@@ -16,8 +17,15 @@
 
 .link {
   display: flex;
+  align-items: center; 
   text-decoration: none;
   color: var(--text-inactive-color);
+  cursor: pointer;
+  transition: color 0.2s ease-in-out;
+}
+
+.link:hover {
+  color: var(--text-primary-color);
 }
 
 .link_active {
@@ -27,6 +35,7 @@
 .link_position_last {
   display: flex;
   justify-content: flex-end;
+  align-items: center;
   flex-basis: 35%;
 }
 
