@@ -63,7 +63,7 @@ export const ProfileUI: FC<ProfileUIProps> = ({
           icon={'EditIcon'}
         />
       </div>
-      
+
       {isFormChanged && (
         <div className={styles.button}>
           <Button
@@ -79,7 +79,7 @@ export const ProfileUI: FC<ProfileUIProps> = ({
           </Button>
         </div>
       )}
-      
+
       {updateUserError && (
         <p className={`${commonStyles.error} pt-5 text text_type_main-default`}>
           {updateUserError}

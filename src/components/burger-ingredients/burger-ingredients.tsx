@@ -6,30 +6,44 @@ import { RootState } from '../../services/store';
 import { Preloader } from '@ui';
 
 export const BurgerIngredients: FC = () => {
-  const { ingredients, isLoading } = useSelector(
+  const { data: ingredients, isLoading } = useSelector(
     (state: RootState) => state.ingredients
   );
 
   const buns = ingredients.filter((item: TIngredient) => item.type === 'bun');
   const mains = ingredients.filter((item: TIngredient) => item.type === 'main');
-  const sauces = ingredients.filter((item: TIngredient) => item.type === 'sauce');
+  const sauces = ingredients.filter(
+    (item: TIngredient) => item.type === 'sauce'
+  );
 
   const [currentTab, setCurrentTab] = useState<TTabMode>('bun');
 
   const titleBunRef = useRef<HTMLHeadingElement>(null);
   const titleMainRef = useRef<HTMLHeadingElement>(null);
   const titleSaucesRef = useRef<HTMLHeadingElement>(null);
-  
+
   const containerRef = useRef<HTMLDivElement>(null);
 
   const handleScroll = () => {
-    if (!containerRef.current || !titleBunRef.current || !titleMainRef.current || !titleSaucesRef.current) return;
+    if (
+      !containerRef.current ||
+      !titleBunRef.current ||
+      !titleMainRef.current ||
+      !titleSaucesRef.current
+    )
+      return;
 
     const containerTop = containerRef.current.getBoundingClientRect().top;
 
-    const bunDiff = Math.abs(titleBunRef.current.getBoundingClientRect().top - containerTop);
-    const mainDiff = Math.abs(titleMainRef.current.getBoundingClientRect().top - containerTop);
-    const sauceDiff = Math.abs(titleSaucesRef.current.getBoundingClientRect().top - containerTop);
+    const bunDiff = Math.abs(
+      titleBunRef.current.getBoundingClientRect().top - containerTop
+    );
+    const mainDiff = Math.abs(
+      titleMainRef.current.getBoundingClientRect().top - containerTop
+    );
+    const sauceDiff = Math.abs(
+      titleSaucesRef.current.getBoundingClientRect().top - containerTop
+    );
 
     if (bunDiff < mainDiff && bunDiff < sauceDiff) {
       setCurrentTab('bun');

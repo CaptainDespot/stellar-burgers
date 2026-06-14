@@ -1,46 +1,48 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { getIngredientsApi } from '../../utils/burger-api';
+import { getIngredientsApi } from '@api';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { TIngredient } from '@utils-types';
 
-export const fetchIngredients = createAsyncThunk(
-  'ingredients/fetchIngredients',
-  async () => {
-    const response = await getIngredientsApi();
-    return response;
-  }
-);
-
-interface IngredientsState {
-  ingredients: TIngredient[];
+export type TIngredientsSlice = {
   isLoading: boolean;
+  data: TIngredient[];
   error: string | null;
-}
+};
 
-const initialState: IngredientsState = {
-  ingredients: [],
+export const initialState: TIngredientsSlice = {
   isLoading: false,
+  data: [],
   error: null
 };
 
-const ingredientsSlice = createSlice({
+export const getIngredients = createAsyncThunk(
+  'constructor/getIngredients',
+  async () => getIngredientsApi()
+);
+
+export const ingredientsSlice = createSlice({
   name: 'ingredients',
   initialState,
   reducers: {},
+  selectors: {
+    ingredientsStateSelector: (state) => state
+  },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchIngredients.pending, (state) => {
+      .addCase(getIngredients.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(fetchIngredients.fulfilled, (state, action) => {
+      .addCase(getIngredients.rejected, (state) => {
         state.isLoading = false;
-        state.ingredients = action.payload;
+        state.error = 'Произошла ошибка при запросе ингредиентов';
       })
-      .addCase(fetchIngredients.rejected, (state, action) => {
+      .addCase(getIngredients.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.error = action.error.message || 'Ошибка загрузки ингредиентов';
+        state.data = action.payload;
       });
   }
 });
+
+export const { ingredientsStateSelector } = ingredientsSlice.selectors;
 
 export default ingredientsSlice.reducer;
