@@ -45,7 +45,6 @@ export const BurgerConstructorSlice = createSlice({
       state.bun = null;
       state.ingredients = [];
     },
-    // Добавь эти два редьюсера внутрь reducers: { ... }
     moveIngredient: (
       state,
       action: PayloadAction<{ dragIndex: number; hoverIndex: number }>

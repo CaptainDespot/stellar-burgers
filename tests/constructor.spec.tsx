@@ -1,27 +1,30 @@
 import { test, expect } from '@playwright/test';
 
-test.beforeEach(async ({ page }) => {
-  await page.routeFromHAR('./tests/hars/ingredients.har', {
+test.beforeEach(async ({ page, context }) => {
+  await page.routeFromHAR('tests/hars/ingredients.har', {
     url: '**/api/ingredients',
     update: false
   });
-  await page.routeFromHAR('./tests/hars/user.har', {
+  await page.routeFromHAR('tests/hars/user.har', {
     url: '**/api/auth/user',
     update: false
   });
-
-  await page.routeFromHAR('./tests/hars/order.har', {
+  await page.routeFromHAR('tests/hars/order.har', {
     url: '**/api/orders',
     update: false
   });
 
   await page.addInitScript(() => {
     localStorage.setItem('refreshToken', 'test-refresh-token');
-    localStorage.setItem(
-      'accessToken',
-      'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.test'
-    );
   });
+
+  await context.addCookies([
+    {
+      name: 'accessToken',
+      value: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.test',
+      url: 'http://localhost:4000'
+    }
+  ]);
 
   await page.goto('/');
 });

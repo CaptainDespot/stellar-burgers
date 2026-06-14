@@ -5,7 +5,9 @@ import {
   moveUp,
   deleteIngredient,
   clearIngredients,
-  initialState
+  initialState,
+  moveIngredient,
+  removeIngredient
 } from './BurgerConstructorSlice';
 import { TIngredient } from '@utils-types';
 
@@ -60,7 +62,12 @@ describe('burgerConstructorSlice reducer', () => {
 
   it('addIngredients — добавляет булку в bun', () => {
     const state = reducer(initialState, addIngredients(mockBun));
-    expect(state.bun).toEqual(mockBun);
+    expect(state.bun).toEqual(
+      expect.objectContaining({
+        ...mockBun,
+        id: expect.any(String)
+      })
+    );
     expect(state.ingredients).toHaveLength(0);
   });
 
@@ -72,7 +79,12 @@ describe('burgerConstructorSlice reducer', () => {
       name: 'Другая булка'
     };
     const state = reducer(stateWithBun, addIngredients(newBun));
-    expect(state.bun).toEqual(newBun);
+    expect(state.bun).toEqual(
+      expect.objectContaining({
+        ...newBun,
+        id: expect.any(String)
+      })
+    );
   });
 
   it('addIngredients — добавляет не-булку в ingredients с полем id', () => {
@@ -113,5 +125,34 @@ describe('burgerConstructorSlice reducer', () => {
     state = reducer(state, clearIngredients());
     expect(state.bun).toBeNull();
     expect(state.ingredients).toHaveLength(0);
+  });
+
+  it('moveIngredient — перемещает элемент с dragIndex на hoverIndex', () => {
+    let state = reducer(initialState, addIngredients(mockIngredient));
+    state = reducer(state, addIngredients(mockIngredient2));
+
+    const firstIngredient = state.ingredients[0];
+    const secondIngredient = state.ingredients[1];
+
+    state = reducer(state, moveIngredient({ dragIndex: 0, hoverIndex: 1 }));
+
+    expect(state.ingredients[0]).toEqual(secondIngredient);
+    expect(state.ingredients[1]).toEqual(firstIngredient);
+    expect(state.ingredients).toHaveLength(2);
+  });
+
+  it('removeIngredient — удаляет элемент по его уникальному id', () => {
+    let state = reducer(initialState, addIngredients(mockIngredient));
+    state = reducer(state, addIngredients(mockIngredient2));
+
+    const targetId = state.ingredients[0].id;
+
+    state = reducer(state, removeIngredient(targetId));
+
+    expect(state.ingredients).toHaveLength(1);
+    expect(state.ingredients[0]._id).toBe(mockIngredient2._id);
+    expect(
+      state.ingredients.find((item) => item.id === targetId)
+    ).toBeUndefined();
   });
 });
