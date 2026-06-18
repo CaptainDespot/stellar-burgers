@@ -3,7 +3,11 @@ import { TConstructorIngredient, TIngredient } from '@utils-types';
 import { BurgerConstructorUI } from '@ui';
 import { useDispatch, useSelector } from '../../services/store'; // проверь путь до своего store
 import { useNavigate } from 'react-router-dom';
-import { clearIngredients } from '../../services/slices/BurgerConstructorSlice';
+import {
+  clearIngredients,
+  addIngredients
+} from '../../services/slices/BurgerConstructorSlice';
+import { createOrder } from '../../services/slices/orderSlice'; // Проверь точный путь и название!
 
 export const BurgerConstructor: FC = () => {
   const dispatch = useDispatch();
@@ -20,6 +24,12 @@ export const BurgerConstructor: FC = () => {
 
   const onOrderClick = () => {
     if (!bun) return;
+    const ingredientIds = [
+      bun._id,
+      ...ingredients.map((ingredient) => ingredient._id),
+      bun._id
+    ];
+    dispatch(createOrder(ingredientIds));
   };
 
   const closeOrderModal = () => {
@@ -37,13 +47,15 @@ export const BurgerConstructor: FC = () => {
   );
 
   return (
-    <BurgerConstructorUI
-      price={price}
-      orderRequest={orderRequest}
-      constructorItems={{ bun, ingredients }}
-      orderModalData={orderModalData}
-      onOrderClick={onOrderClick}
-      closeOrderModal={closeOrderModal}
-    />
+    <div data-testid='burger-constructor'>
+      <BurgerConstructorUI
+        price={price}
+        orderRequest={orderRequest}
+        constructorItems={{ bun, ingredients }}
+        orderModalData={orderModalData}
+        onOrderClick={onOrderClick}
+        closeOrderModal={closeOrderModal}
+      />
+    </div>
   );
 };

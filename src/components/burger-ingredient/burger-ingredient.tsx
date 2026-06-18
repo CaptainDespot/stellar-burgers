@@ -1,16 +1,19 @@
 import { FC, memo } from 'react';
 import { useLocation } from 'react-router-dom';
+
 import { BurgerIngredientUI } from '@ui';
-import { useDispatch } from '../../services/store';
-import { addIngredients } from '../../services/slices/BurgerConstructorSlice';
 import { TBurgerIngredientProps } from './type';
+import { useDispatch } from '../../services/store';
+// Импортируем наш экшен из слайса
+import { addIngredients } from '../../services/slices/BurgerConstructorSlice';
 
 export const BurgerIngredient: FC<TBurgerIngredientProps> = memo(
   ({ ingredient, count }) => {
     const location = useLocation();
-    const dispatch = useDispatch();
+    const dispatch = useDispatch(); // Подключаем dispatch
 
     const handleAdd = () => {
+      // ВОТ ЭТА СТРОКА: отправляем ингредиент в хранилище при клике!
       dispatch(addIngredients(ingredient));
     };
 

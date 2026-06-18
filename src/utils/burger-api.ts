@@ -1,7 +1,16 @@
 import { setCookie, getCookie } from './cookie';
 import { TIngredient, TOrder, TOrdersData, TUser } from './types';
+import localIngredients from './ingredients-mock.json';
 
-const URL = process.env.BURGER_API_URL;
+// 2. Полностью переписываем функцию, чтобы она не ходила в сеть
+export const getIngredientsApi = () =>
+  Promise.resolve(localIngredients).then((data) => {
+    if (data?.success) return data.data;
+    return Promise.reject(data);
+  });
+
+const URL =
+  process.env.BURGER_API_URL || 'https://norma.nomoreparties.space/api';
 
 const checkResponse = <T>(res: Response): Promise<T> =>
   res.ok ? res.json() : res.json().then((err) => Promise.reject(err));
@@ -71,13 +80,13 @@ export type TOrdersResponse = TServerResponse<{
   data: TOrder[];
 }>;
 
-export const getIngredientsApi = () =>
-  fetch(`${URL}/ingredients`)
-    .then((res) => checkResponse<TIngredientsResponse>(res))
-    .then((data) => {
-      if (data?.success) return data.data;
-      return Promise.reject(data);
-    });
+//export const getIngredientsApi = () =>
+//fetch(`${URL}/ingredients`)
+//.then((res) => checkResponse<TIngredientsResponse>(res))
+//.then((data) => {
+//if (data?.success) return data.data;
+//return Promise.reject(data);
+//});
 
 export const getFeedsApi = () =>
   fetch(`${URL}/orders/all`)

@@ -15,7 +15,7 @@ export const BurgerIngredientUI: FC<TBurgerIngredientUIProps> = memo(
     const { image, price, name, _id } = ingredient;
 
     return (
-      <li className={styles.container}>
+      <li className={styles.container} data-testid='ingredient-card'>
         <Link
           className={styles.article}
           to={`/ingredients/${_id}`}
@@ -31,7 +31,10 @@ export const BurgerIngredientUI: FC<TBurgerIngredientUIProps> = memo(
         </Link>
         <AddButton
           text='Добавить'
-          onClick={handleAdd}
+          onClick={(e) => {
+            e.preventDefault(); // Предотвращаем переход по ссылке/открытие модалки
+            handleAdd(); // Вызываем добавление в Redux
+          }}
           extraClass={`${styles.addButton} mt-8`}
         />
       </li>
