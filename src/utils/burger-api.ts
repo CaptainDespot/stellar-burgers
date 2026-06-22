@@ -1,13 +1,13 @@
 import { setCookie, getCookie } from './cookie';
 import { TIngredient, TOrder, TOrdersData, TUser } from './types';
-import localIngredients from './ingredients-mock.json';
 
-// 2. Полностью переписываем функцию, чтобы она не ходила в сеть
 export const getIngredientsApi = () =>
-  Promise.resolve(localIngredients).then((data) => {
-    if (data?.success) return data.data;
-    return Promise.reject(data);
-  });
+  fetch(`${URL}/ingredients`)
+    .then((res) => checkResponse<TServerResponse<{ data: TIngredient[] }>>(res))
+    .then((data) => {
+      if (data?.success) return data.data;
+      return Promise.reject(data);
+    });
 
 const URL =
   process.env.BURGER_API_URL || 'https://norma.nomoreparties.space/api';

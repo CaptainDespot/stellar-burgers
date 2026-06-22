@@ -7,7 +7,7 @@ import {
   clearIngredients,
   addIngredients
 } from '../../services/slices/BurgerConstructorSlice';
-import { createOrder } from '../../services/slices/orderSlice'; // Проверь точный путь и название!
+import { createOrder } from '../../services/slices/orderSlice';
 
 export const BurgerConstructor: FC = () => {
   const dispatch = useDispatch();
@@ -22,13 +22,21 @@ export const BurgerConstructor: FC = () => {
     (state) => state.order?.orderModalData || null
   );
 
+  const user = useSelector((state) => state.user.user);
   const onOrderClick = () => {
     if (!bun) return;
+
+    if (!user) {
+      navigate('/login');
+      return;
+    }
+
     const ingredientIds = [
       bun._id,
       ...ingredients.map((ingredient) => ingredient._id),
       bun._id
     ];
+
     dispatch(createOrder(ingredientIds));
   };
 
