@@ -19,7 +19,7 @@ export const OrderInfo: FC = () => {
   const { number } = useParams();
   const dispatch = useDispatch();
 
-  const { ingredients } = useSelector((state) => state.ingredients);
+  const { data: ingredients } = useSelector((state) => state.ingredients);
   const { orders: feedOrders } = useSelector((state) => state.feed);
   const { orders: userOrders } = useSelector((state) => state.userOrders);
 

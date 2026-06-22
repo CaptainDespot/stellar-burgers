@@ -24,7 +24,7 @@ import { AppHeader, IngredientDetails, OrderInfo, Modal } from '@components';
 import { useDispatch, useSelector } from '../../services/store';
 import { TIngredient } from '@utils-types';
 import { useEffect } from 'react';
-import { fetchIngredients } from '../../services/slices/ingredientsSlices';
+import { getIngredients } from '../../services/slices/ingredientsSlices';
 
 import { autoLogin } from '../../services/slices/userSlice';
 
@@ -35,7 +35,7 @@ const App = () => {
   const background = location.state?.background;
 
   useEffect(() => {
-    dispatch(fetchIngredients());
+    dispatch(getIngredients());
     dispatch(autoLogin());
   }, [dispatch]);
 

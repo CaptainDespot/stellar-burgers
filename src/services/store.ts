@@ -7,7 +7,7 @@ import {
 
 import userReducer from './slices/userSlice';
 import ingredientsReducer from './slices/ingredientsSlices';
-import burgerConstructorReducer from './slices/constructorSlice';
+import burgerConstructorReducer from './slices/BurgerConstructorSlice';
 import feedReducer from './slices/feedSlice';
 import orderReducer from './slices/orderSlice';
 import userOrdersReducer from './slices/userOrderSlice';

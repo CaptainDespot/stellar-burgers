@@ -41,11 +41,7 @@ export const BurgerIngredientsUI: FC<BurgerIngredientsUIProps> = memo(
             </Tab>
           </ul>
         </nav>
-        <div 
-          className={styles.content} 
-          ref={containerRef} 
-          onScroll={onScroll}
-        >
+        <div className={styles.content} ref={containerRef} onScroll={onScroll}>
           <IngredientsCategory
             title='Булки'
             titleRef={titleBunRef}
